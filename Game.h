@@ -60,7 +60,7 @@ class Game {
 
     bool makePlayers();
 
-    void handlePlayerTurn(Player *player);
+    bool handlePlayerTurn(Player *player);
 
     /**
      * Handles the "place" action

@@ -5,6 +5,11 @@ MainMenu::MainMenu()
 
 }
 
+MainMenu::~MainMenu()
+{
+    
+}
+
 void MainMenu::printMainOptions()
 {
     cout << "Menu" << endl;
@@ -17,69 +22,49 @@ void MainMenu::printMainOptions()
 
 void MainMenu::startMenu()
 {
-    std::cout << "Welcome to Scrabble!" << std::endl;
-    std::cout << "-------------------" << std::endl;
+    cout << "Welcome to Scrabble!" << std::endl;
+    cout << "-------------------" << std::endl;
 
     bool gameEnd = false;
     string input;
-    int menuInput = 0;
 
     while (!gameEnd && !cin.eof())
     {
         printMainOptions();
 
-        bool validInput = false;
+        //getting input from user
+        cout << "> ";
+        getline(cin, input);
 
-        while (!validInput && !cin.eof())
-        {
-            cout << "> ";
-            std::getline(cin, input);
+        //regex cases
+        regex case1("1");
+        regex case2("2");
+        regex case3("3");
+        regex case4("4");
 
-            try
-            {
-                menuInput = std::stoi(input);
-
-                validInput = menuInput >= 1 && menuInput <= 4;
-                if (!validInput)
-                {
-                    cout << "Invalid option. Please enter a number between 1 and 4" << endl;
-                }
-            }
-            catch (std::exception &err)
-            {
-
-                if (!cin.eof())
-                {
-                    cout << "Invalid option. Please enter a number between 1 and 4" << endl;
-                }
-            }
-        }
-
-        switch (menuInput)
-        {
-        case 1:
-            cout << "Starting New Game" << endl;
+        if (regex_match(input, case1)) {
+            cout << "\nStarting New Game" << endl;
             cout << "-------------------";
-                startGame();
-                gameEnd = true;
-            break;
-        case 2:
+            startGame();
+            gameEnd = true;
+
+        } else if (regex_match(input, case2)) {
             loadGame();
             gameEnd = true;
-            break;
-        case 3:
+
+        } else if (regex_match(input, case3)) {
             credits();
-            break;
-
-        case 4:
+            
+        } else if (regex_match(input, case4)) {
+            cout << "Quitting" << endl;
             gameEnd = true;
-            break;
-
-        default:
-            break;
+            
+        } else if (cin.eof()) {
+            gameEnd = true;
+        } else {
+            cout << "Invalid option. Please enter a number between 1 and 4" << endl;
         }
     }
-    cout << "Quitting" << endl;
 }
 
 void MainMenu::startGame()
@@ -97,7 +82,7 @@ void MainMenu::loadGame()
     cout << "Enter saved game location" << endl;
     cout << "> ";
     string input;
-    std::getline(cin, input);
+    getline(cin, input);
 
     //loading in file
     ifstream inFile(input);
@@ -116,18 +101,9 @@ void MainMenu::loadGame()
 void MainMenu::credits() {
     cout << endl;
     cout << "-------------------" << endl;
-    cout << "Name: Sao Kanneh" << endl 
-         << "Student ID: 3788996" << endl 
-         << "Email: s3788996@student.rmit.eud.au" << endl 
-         << endl;
-
     cout << "Name: Hina Lee" << endl
          << "Student ID: 3910654" << endl
-         << "Email: s3910654@student.rmit.edu.au" << endl
-         << endl;
-    cout << "Name: Jones Mwanza" << endl
-         << "Student ID: 3790504" << endl
-         << "Email: s3790504@student.rmit.eud.au" << endl
-         << endl;
+         << "Email: s3910654@student.rmit.edu.au" << endl;
     cout << "-------------------" << endl;
+    cout << endl;
 }

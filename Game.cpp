@@ -57,7 +57,6 @@ void Game::startGameLoop() {
 
     if (playersMade) {
         // Game start
-
             mainGameLoop();
         }
     }
@@ -91,6 +90,10 @@ bool Game::makePlayers() {
 }
 
 void Game::saveGame(string currPlayerName, string filename) {
+    //appending .txt if the file isnt specified
+    filename = filename + ".txt";
+
+    //adding the game data to the file
     ofstream outfile(filename);
     if (!outfile) {
         cout << "Error saving file";
@@ -126,9 +129,11 @@ void Game::quitGame() {
     }
 }
 
-void Game::handlePlayerTurn(Player *player) {
+bool Game::handlePlayerTurn(Player *player) {
+    bool gameEnd = false;
     string input;
-    cout << player->getName() << ", it's your turn" << endl;
+    cout << endl;
+    cout << player->getName() << ", it's your turn!" << endl;
 
     for (Player *p: players) {
         cout << "Score for " << p->getName() << ": " << p->getScore()
@@ -137,7 +142,7 @@ void Game::handlePlayerTurn(Player *player) {
 
     cout << *gameBoard;
 
-    cout << "Your hand is\n" << *player->getHand();
+    cout << "\nYour hand is\n" << *player->getHand();
 
     bool turnEnd = false;
 
@@ -149,12 +154,16 @@ void Game::handlePlayerTurn(Player *player) {
     // horizontal = 0; vertical = 1;
 
     for (int i = 0; i < 7 && !turnEnd; i++) {
+        cout << "What would you like to do?" << endl;
         cout << "> ";
         getline(cin, input);
 
-        regex place_expr("^[place]+[ ][A-Z][ ][at]+[ ][A-Z]([0-9]+)");
+        regex placeTileExpr("^[place]+[ ][A-Z][ ][at]+[ ][A-Z]([0-9]+)");
         regex placeDoneExpr("^[place]+[\\s]([D][one]+)");
+        regex passTurnExpr("pass");
+        regex helpExpr("help");
         regex saveGameExpr("save [A-Za-z\\d\\-_.]+");
+        regex quitGameExpr("Quit");
 
 //        Tile *placedTile = nullptr;
 
@@ -162,7 +171,7 @@ void Game::handlePlayerTurn(Player *player) {
          * This if chain checks the input and executes the relevant action,
          * e.g. "place", "replace", etc.
          */
-        if (regex_match(input, place_expr)) {
+        if (regex_match(input, placeTileExpr)) {
 
             // TODO: implement the scrabble "horizontal" or "vertical" rule
 
@@ -173,16 +182,57 @@ void Game::handlePlayerTurn(Player *player) {
             player->addScore(gameBoard->computeTurnScore(*placedTiles,
                                                          *placedTilesPositions));
 
+        } else if(regex_match(input, passTurnExpr)){
+            cout << "Turn passed!\n";
+            turnEnd = true;
+        } else if(regex_match(input, helpExpr)){
+            cout << "List of commands!\n";
+            cout << "---------------------------------------------------------" << std::endl;
+            cout << "'place [letter] at [Row letter + Col number]'" << endl;
+            cout << "       Pends chosen tile to be placed at chosen coordinate." << endl;
+            cout << "       Can continuously place tiles until no more tiles left or 'place Done' command entered." << endl;
+            cout << "       Example: 'place S at D5'" << endl;
+            cout << endl;
+            cout << "'place Done'" << endl;
+            cout << "       Finishes turn and all pending tiles will be placed if word is valid." << endl;
+            cout << "       Example: 'place S at D5'" << endl;
+            cout << "                'place A at D6'" << endl;
+            cout << "                'place D at D7'" << endl;
+            cout << "                'place S at D5'" << endl;
+            cout << "                'place Done'" << endl;
+            cout << endl;
+            cout << "'pass'" << endl;
+            cout << "       Current player passes turn. Turn will be passed to next player." << endl;
+            cout << "       Example: 'pass'" << endl;
+            cout << endl;
+            cout << "'save [file name]" << endl;
+            cout << "       Saved current game as a file at desired file name location." << endl;
+            cout << "       If file does not exist, it will create a new file." << endl;
+            cout << "       Example: 'save savedGame'" << endl;
+            cout << "             or 'save savedGame'" << endl;
+            cout << endl;
+            cout << "'Quit'" << endl;
+            cout << "       Ends the current game. Program will terminate." << endl;
+            cout << "       Example: 'Quit'" << endl;
+            cout << "---------------------------------------------------------" << std::endl;
+            cout << endl;
+
+
+
         } else if(regex_match(input, saveGameExpr)) {
             string filename = input.substr(4);
             saveGame(player->getName(), filename);
+        } else if(regex_match(input, quitGameExpr)) {
+            gameEnd = true;
+            turnEnd = true;
         } else if (cin.eof()) {
             turnEnd = true;
         } else {
             cout << "Invalid action provided. Please try again" << endl;
         }
-
     }
+
+    return gameEnd;
 }
 
 void
@@ -226,29 +276,21 @@ void Game::startGameFromLoad() {
 }
 
 void Game::mainGameLoop() {
+    cout << endl;
     cout << "Let's Play!" << endl;
+    cout << "If you have any trouble, feel free to type 'help'!" << endl;
 
     bool gameOver = false;
     while (!gameOver && !std::cin.eof()) {
         // loop through each player, handle their turns.
-        // may have to split some logic into functions.
-        for (Player *player: players) {
-
-            /*TODO: HANDLE PLAYER ACTIONS HERE;
-             * E.g.:
-             *    - handle one of [place tile,
-             *      replace tile,
-             *      pass, quit, save]
-             *    - for place use a while loop.
-            */
-
-            handlePlayerTurn(player);
+        for (int i = 0; i < int(players.size()) && !gameOver; i++){
+            Player *player = players[i];
+            gameOver = handlePlayerTurn(player);
 
             //TODO: CHECK SCORES AND PASSES AT THE END OF THE PLAYER FUNCTIONS (Assuming they don't quit)
-
-
         }
     }
+    cout << "\nThank you for playing, See you next time!\n";
 }
 //
 //int Game::scoreCheck(int direction, string initialCoord) {
