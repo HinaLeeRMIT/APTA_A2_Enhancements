@@ -47,12 +47,8 @@ Game::~Game() {
     }
 }
 
-void Game::startGameLoop() {
-    //  game start, get first two players
-
-    std::string input;
-
-    bool playersMade = makePlayers();
+void Game::startGameLoop(int numPlayers) {
+    bool playersMade = makePlayers(numPlayers);
 
 
     if (playersMade) {
@@ -63,13 +59,13 @@ void Game::startGameLoop() {
 
 
 
-bool Game::makePlayers() {
+bool Game::makePlayers(int numPlayers) {
     string input;
     bool playersMade = false;
     int madePlayers = 0;
     regex playerNameExpr("[A-Z]+");
 
-    while (madePlayers < 2 && !cin.eof()) {
+    while (madePlayers < numPlayers && !cin.eof()) {
         cout << "Enter a name for player " << (madePlayers + 1)
              << " (uppercase characters only)" << endl;
 

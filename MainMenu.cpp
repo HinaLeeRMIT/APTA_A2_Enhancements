@@ -43,9 +43,27 @@ void MainMenu::startMenu()
         regex case4("4");
 
         if (regex_match(input, case1)) {
+            //dynamically assigning number of players based on user input
+            string numPlayersInput;
+
+            cout << "How many players(2-4)?" << endl;
+            cout << "> ";
+            getline(cin, numPlayersInput);
+
+            regex validNumPlayers("^[2-4]$");
+
+            //looping until valid number of players
+            do {
+                cout << "Invalid option. Please enter a number between 2 and 4!" << endl;
+                cout << "> ";
+                getline(cin, numPlayersInput);
+            }while (!regex_match(numPlayersInput, validNumPlayers));
+
+            int intNumPlayers = stoi(numPlayersInput);
+
             cout << "\nStarting New Game" << endl;
             cout << "-------------------";
-            startGame();
+            startGame(intNumPlayers);
             gameEnd = true;
 
         } else if (regex_match(input, case2)) {
@@ -56,23 +74,23 @@ void MainMenu::startMenu()
             credits();
             
         } else if (regex_match(input, case4)) {
-            cout << "Quitting" << endl;
             gameEnd = true;
             
         } else if (cin.eof()) {
             gameEnd = true;
         } else {
-            cout << "Invalid option. Please enter a number between 1 and 4" << endl;
+            cout << "Invalid option. Please enter a number between 1 and 4!" << endl;
         }
     }
+    cout << "Quitting" << endl;
 }
 
-void MainMenu::startGame()
+void MainMenu::startGame(int numPlayers)
 {
     // TODO: Create new Game instance. Do not load anything into it.
     // NOTE: Can overload stream operator on Game instance to get access to all the information.
     game = new Game();
-    game->startGameLoop();
+    game->startGameLoop(numPlayers);
 }
 
 void MainMenu::loadGame()
@@ -100,6 +118,7 @@ void MainMenu::loadGame()
 
 void MainMenu::credits() {
     cout << endl;
+    cout << "Credits:" << endl;
     cout << "-------------------" << endl;
     cout << "Name: Hina Lee" << endl
          << "Student ID: 3910654" << endl

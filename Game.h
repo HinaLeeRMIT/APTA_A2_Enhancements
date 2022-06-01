@@ -22,8 +22,8 @@ class Game {
 
    void addPlayers(int numPlayers);
 
-   //Start 2 player game
-   void startGameLoop();
+   //Start game based off numPlayers
+   void startGameLoop(int numPlayers);
 
     //if player hits score ceiling, return true
     bool runScoreCheck();
@@ -58,7 +58,7 @@ class Game {
     string startCoord;
     string endCoord;
 
-    bool makePlayers();
+    bool makePlayers(int numPlayers);
 
     bool handlePlayerTurn(Player *player);
 

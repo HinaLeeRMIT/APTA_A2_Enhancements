@@ -26,7 +26,7 @@ public:
     void startMenu();
     void printMainOptions();
 
-    void startGame();
+    void startGame(int numPlayers);
 
     //Not sure how to do this
     void loadGame();
