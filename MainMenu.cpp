@@ -52,12 +52,14 @@ void MainMenu::startMenu()
 
             regex validNumPlayers("^[2-4]$");
 
-            //looping until valid number of players
-            do {
-                cout << "Invalid option. Please enter a number between 2 and 4!" << endl;
-                cout << "> ";
-                getline(cin, numPlayersInput);
-            }while (!regex_match(numPlayersInput, validNumPlayers));
+            //looping until valid number of players if invalid entry
+            if (!regex_match(numPlayersInput, validNumPlayers)){
+                do {
+                    cout << "Invalid option. Please enter a number between 2 and 4!" << endl;
+                    cout << "> ";
+                    getline(cin, numPlayersInput);
+                }while (!regex_match(numPlayersInput, validNumPlayers));
+            }
 
             int intNumPlayers = stoi(numPlayersInput);
 

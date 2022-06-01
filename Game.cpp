@@ -21,20 +21,25 @@ Game::Game(ifstream& gameFile) {
     gameBoard = new GameBoard();
     Player *player = new Player();
     Player *player2 = new Player();
+    int numPlayers = 0;
+
+    gameFile >> numPlayers;
+
+    cout << numPlayers;
     gameFile >> *player;
     gameFile >> *player2;
     gameFile >> *gameBoard;
     gameFile >> *bag;
-    string currentPlayer;
-    getline(gameFile, currentPlayer);
+    // string currentPlayer;
+    // getline(gameFile, currentPlayer);
 
-    if (currentPlayer == player->getName()) {
-        players.push_back(player);
-        players.push_back(player2);
-    } else {
-        players.push_back(player2);
-        players.push_back(player);
-    }
+    // if (currentPlayer == player->getName()) {
+    //     players.push_back(player);
+    //     players.push_back(player2);
+    // } else {
+    //     players.push_back(player2);
+    //     players.push_back(player);
+    // }
 
 
 }
@@ -94,6 +99,7 @@ void Game::saveGame(string currPlayerName, string filename) {
     if (!outfile) {
         cout << "Error saving file";
     } else {
+        outfile << players.size() << endl;
         for (Player *player: players) {
             // //Saving each players name, score and hand
             outfile << *player;
@@ -107,7 +113,7 @@ void Game::saveGame(string currPlayerName, string filename) {
         //Saving current players name
         outfile << currPlayerName << endl;
         outfile.close();
-        cout << "Game saved to " << filename << endl;
+        cout << "Game saved to" << filename << endl;
     }
 }
 
@@ -150,6 +156,7 @@ bool Game::handlePlayerTurn(Player *player) {
     // horizontal = 0; vertical = 1;
 
     for (int i = 0; i < 7 && !turnEnd; i++) {
+        cout << endl;
         cout << "What would you like to do?" << endl;
         cout << "> ";
         getline(cin, input);
