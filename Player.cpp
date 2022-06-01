@@ -84,7 +84,7 @@ void Player::passTurn(){
     turnsPassed++;
 }
 
-std::string Player::getName() {
+string Player::getName() {
     return name;
 }
 
@@ -92,16 +92,16 @@ void Player::setName(string name) {
     this->name = name;
 }
 
-std::ifstream &operator>>(std::ifstream& inFile,Player &player) {
+ifstream &operator>>(ifstream& inFile,Player &player) {
     //reading name
     string name = "";
-    std::getline(inFile, name);
+    getline(inFile, name);
     player.setName(name);
 
     //reading score
-    string scoreStr = "";
-    std::getline(inFile, scoreStr);
-    int score = std::stoi(scoreStr);
+    int score;
+    inFile >> score;
+    inFile.ignore();
     player.addScore(score);
 
     //reading playerhand

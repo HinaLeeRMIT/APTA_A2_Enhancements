@@ -12,6 +12,7 @@ MainMenu::~MainMenu()
 
 void MainMenu::printMainOptions()
 {
+    cout << endl;
     cout << "Menu" << endl;
     cout << "----" << endl;
     cout << "1. New Game" << endl;
@@ -69,9 +70,9 @@ void MainMenu::startMenu()
             gameEnd = true;
 
         } else if (regex_match(input, case2)) {
-            loadGame();
-            gameEnd = true;
-
+            if (loadGame()){
+                gameEnd = true;
+            }
         } else if (regex_match(input, case3)) {
             credits();
             
@@ -95,14 +96,18 @@ void MainMenu::startGame(int numPlayers)
     game->startGameLoop(numPlayers);
 }
 
-void MainMenu::loadGame()
+bool MainMenu::loadGame()
 {
-    //TODO load game using overloaded input operator
+    //checker to see if game is loaded
+    bool gameLoaded = false;
 
     cout << "Enter saved game location" << endl;
     cout << "> ";
     string input;
     getline(cin, input);
+
+    //appending .txt to file name
+    input = input + ".txt";
 
     //loading in file
     ifstream inFile(input);
@@ -111,11 +116,13 @@ void MainMenu::loadGame()
         game = new Game(inFile);
         inFile.close();
         game->startGameFromLoad();
+
+        gameLoaded = true;
     }
     else{
         cout<<"Unable to load save file " << input << endl;
     }
-
+    return gameLoaded;
 }
 
 void MainMenu::credits() {

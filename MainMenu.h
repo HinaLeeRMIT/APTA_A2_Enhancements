@@ -28,8 +28,7 @@ public:
 
     void startGame(int numPlayers);
 
-    //Not sure how to do this
-    void loadGame();
+    bool loadGame();
 
     void credits();
 

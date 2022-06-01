@@ -1,7 +1,3 @@
-//
-// Created by sheku on 11/05/2022.
-//
-
 #include "GameBoard.h"
 
 GameBoard::GameBoard() {
@@ -211,10 +207,6 @@ int GameBoard::computeRowScore(int row, int col, vector<Tile*> placedTiles, vect
 }
 
 std::ifstream &operator>>(std::ifstream& inFile,GameBoard &gameBoard) {
-    /*
-    TODO: finish ifstream
-    */
-
     BoardGrid grid; 
 
 
@@ -258,10 +250,6 @@ std::ifstream &operator>>(std::ifstream& inFile,GameBoard &gameBoard) {
 }
 
 std::ofstream &operator << (std::ofstream& outFile,GameBoard &gameBoard) {
-    /*
-    TODO: finish ofstream
-    */
-
     BoardGrid  grid = gameBoard.getBoardGrid();
 
     for(size_t i = 0; i < grid.size(); i++) {
@@ -285,14 +273,18 @@ std::ofstream &operator << (std::ofstream& outFile,GameBoard &gameBoard) {
 
 std::ostream &operator<<(std::ostream &out, GameBoard &gameBoard) {
     BoardGrid boardGrid = gameBoard.getBoardGrid();
-    cout << "   " << 0 << "  ";
-    for (int i = 1; i < BOARD_SIZE; i++) {
+    cout << "    " << 0 << "   ";
+    for (int i = 1; i < 10; i++) {
+        out << i << "   ";
+    }
+    //formatting for double digits
+    for (int i = 10; i < BOARD_SIZE; i++) {
         out << i << "  ";
     }
     out << endl;
     out << " ";
-    for (int i = 0; i < (BOARD_SIZE * 3 + 3); i++) {
-        out << "-";
+    for (int i = 0; i < (BOARD_SIZE * 2 + 1); i++) {
+        out << " -";
     }
     out << endl;
 

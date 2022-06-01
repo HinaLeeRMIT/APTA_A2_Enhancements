@@ -54,7 +54,7 @@ class Game {
   private:
     TileBag *bag;
     GameBoard *gameBoard;
-    std::vector<Player *> players;
+    vector<Player *> players;
     string startCoord;
     string endCoord;
 

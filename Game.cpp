@@ -14,34 +14,27 @@ Game::Game() {
     bag = new TileBag();
     bag->buildBag();
     gameBoard = new GameBoard();
+
+
 }
 
 Game::Game(ifstream& gameFile) {
     bag = new TileBag();
     gameBoard = new GameBoard();
-    Player *player = new Player();
-    Player *player2 = new Player();
     int numPlayers = 0;
 
     gameFile >> numPlayers;
+    gameFile.ignore();
 
-    cout << numPlayers;
-    gameFile >> *player;
-    gameFile >> *player2;
+    for(int i = 0; i < numPlayers; i++){
+        Player *player = new Player();
+
+        gameFile >> *player;
+        players.push_back(player);
+    }
+
     gameFile >> *gameBoard;
     gameFile >> *bag;
-    // string currentPlayer;
-    // getline(gameFile, currentPlayer);
-
-    // if (currentPlayer == player->getName()) {
-    //     players.push_back(player);
-    //     players.push_back(player2);
-    // } else {
-    //     players.push_back(player2);
-    //     players.push_back(player);
-    // }
-
-
 }
 
 Game::~Game() {
@@ -91,6 +84,8 @@ bool Game::makePlayers(int numPlayers) {
 }
 
 void Game::saveGame(string currPlayerName, string filename) {
+    //removing the blank space from the start
+    filename.erase(0,1);
     //appending .txt if the file isnt specified
     filename = filename + ".txt";
 
@@ -113,17 +108,11 @@ void Game::saveGame(string currPlayerName, string filename) {
         //Saving current players name
         outfile << currPlayerName << endl;
         outfile.close();
-        cout << "Game saved to" << filename << endl;
+        cout << "Game saved to " << filename << endl;
     }
 }
 
 void Game::quitGame() {
-    /*
-    TODO: Check if this is properly implemented
-    std exit does not perform any cleanup
-    unsure if calling game destructor is enough, need to check back on this!
-    */
-
     delete bag;
 
     for(Player* p: players) {
@@ -168,15 +157,12 @@ bool Game::handlePlayerTurn(Player *player) {
         regex saveGameExpr("save [A-Za-z\\d\\-_.]+");
         regex quitGameExpr("Quit");
 
-//        Tile *placedTile = nullptr;
-
         /*
          * This if chain checks the input and executes the relevant action,
          * e.g. "place", "replace", etc.
          */
         if (regex_match(input, placeTileExpr)) {
 
-            // TODO: implement the scrabble "horizontal" or "vertical" rule
 
             handlePlace(player, input, placedTiles, placedTilesPositions);
         } else if (regex_match(input, placeDoneExpr)) {
