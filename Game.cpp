@@ -15,13 +15,15 @@ Game::Game() {
     bag->buildBag();
     gameBoard = new GameBoard();
 
-
+    //setting valid words
+    setValidWords();
 }
 
 Game::Game(ifstream& gameFile) {
     bag = new TileBag();
     gameBoard = new GameBoard();
     int numPlayers = 0;
+    int currPlayer = 0;
 
     gameFile >> numPlayers;
     gameFile.ignore();
@@ -35,6 +37,11 @@ Game::Game(ifstream& gameFile) {
 
     gameFile >> *gameBoard;
     gameFile >> *bag;
+    gameFile >> currPlayer;
+    gameFile.ignore();
+
+    //setting valid words
+    setValidWords();
 }
 
 Game::~Game() {
@@ -44,18 +51,6 @@ Game::~Game() {
         delete player;
     }
 }
-
-void Game::startGameLoop(int numPlayers) {
-    bool playersMade = makePlayers(numPlayers);
-
-
-    if (playersMade) {
-        // Game start
-            mainGameLoop();
-        }
-    }
-
-
 
 bool Game::makePlayers(int numPlayers) {
     string input;
@@ -83,45 +78,59 @@ bool Game::makePlayers(int numPlayers) {
     return playersMade;
 }
 
-void Game::saveGame(string currPlayerName, string filename) {
-    //removing the blank space from the start
-    filename.erase(0,1);
-    //appending .txt if the file isnt specified
-    filename = filename + ".txt";
+void Game::setValidWords(){
+    //setting list of valid words to check against
+    ifstream inFile("validWords");
 
-    //adding the game data to the file
-    ofstream outfile(filename);
-    if (!outfile) {
-        cout << "Error saving file";
-    } else {
-        outfile << players.size() << endl;
-        for (Player *player: players) {
-            // //Saving each players name, score and hand
-            outfile << *player;
+    //checking if file loaded properly
+    if(!inFile.fail()){
+        //looping while not EOF
+        while(inFile.peek()!=EOF){
+            string validWord = "";
+            getline(inFile, validWord);
+            validWords.push_back(validWord);
         }
-        //Saving board state
-        outfile << *gameBoard;
-
-        //Saving tile bag state
-        outfile << *bag;
-
-        //Saving current players name
-        outfile << currPlayerName << endl;
-        outfile.close();
-        cout << "Game saved to " << filename << endl;
     }
 }
 
-void Game::quitGame() {
-    delete bag;
+void Game::startGameLoop(int numPlayers) {
+    bool playersMade = makePlayers(numPlayers);
 
-    for(Player* p: players) {
-        delete p;
+
+    if (playersMade) {
+        // Game start
+            mainGameLoop();
+        }
     }
+
+void Game::startGameFromLoad() {
+    mainGameLoop();
 }
 
-bool Game::handlePlayerTurn(Player *player) {
-    bool gameEnd = false;
+void Game::mainGameLoop() {
+    cout << endl;
+    cout << "Let's Play!" << endl;
+    cout << "If you have any trouble, feel free to type 'help'!" << endl;
+
+    while (!gameEnd && !std::cin.eof()) {
+        // loop through each player, handle their turns.
+        for (int i = 0; i < int(players.size()) && !gameEnd; i++){
+            Player *player = players[i];
+            while(!handlePlayerTurn(player, i)){
+                cout << endl;
+                cout << "Invalid turn, please try again!!!" << endl;
+                cout << endl;
+            }
+
+            //TODO: CHECK SCORES AND PASSES AT THE END OF THE PLAYER FUNCTIONS (Assuming they don't quit)
+        }
+    }
+    cout << "\nThank you for playing, See you next time!\n";
+}
+
+bool Game::handlePlayerTurn(Player *player, int playerIndex) {
+    bool validTurn = false;
+    string tempWord = "";
     string input;
     cout << endl;
     cout << player->getName() << ", it's your turn!" << endl;
@@ -162,17 +171,25 @@ bool Game::handlePlayerTurn(Player *player) {
          * e.g. "place", "replace", etc.
          */
         if (regex_match(input, placeTileExpr)) {
+            //handlePlaceTile(player, input, placedTiles, placedTilesPositions);
 
+            tempWord = handlePlace(player, input, tempWord, placedTiles, placedTilesPositions);
 
-            handlePlace(player, input, placedTiles, placedTilesPositions);
         } else if (regex_match(input, placeDoneExpr)) {
-            turnEnd = true;
+            // if (handleValidWord(tempWord) == true){
+            //     validTurn = true;
+            //     player->addScore(gameBoard->computeTurnScore(*placedTiles,
+            //                                              *placedTilesPositions));
+            // }
 
+            validTurn = true; 
+            turnEnd = true;
             player->addScore(gameBoard->computeTurnScore(*placedTiles,
-                                                         *placedTilesPositions));
+                                                          *placedTilesPositions));
 
         } else if(regex_match(input, passTurnExpr)){
             cout << "Turn passed!\n";
+            validTurn = true;
             turnEnd = true;
         } else if(regex_match(input, helpExpr)){
             cout << "List of commands!\n";
@@ -210,10 +227,11 @@ bool Game::handlePlayerTurn(Player *player) {
 
         } else if(regex_match(input, saveGameExpr)) {
             string filename = input.substr(4);
-            saveGame(player->getName(), filename);
+            saveGame(playerIndex, filename);
         } else if(regex_match(input, quitGameExpr)) {
-            gameEnd = true;
+            validTurn = true;
             turnEnd = true;
+            gameEnd = true;
         } else if (cin.eof()) {
             turnEnd = true;
         } else {
@@ -221,15 +239,32 @@ bool Game::handlePlayerTurn(Player *player) {
         }
     }
 
-    return gameEnd;
+    return validTurn;
 }
 
-void
-Game::handlePlace(Player *player, string input, vector<Tile *> *placedTiles,
+// void Game::handlePlaceTile(Player *player, string input, vector<Tile*> *placedTiles,vector<string> *positions){
+//     int col = 0;
+//     int row = 0;
+
+//     vector<string> tilePosVec = splitPlaceCommand(input);
+
+//     //char tileLetter = tilePosVec.at(0)[0];
+//     string position = tilePosVec.at(1);
+//     col = (int)position.at(0);
+//     //row = int(position.substr(1));
+//     cout << row + " " + col;
+
+//     // if (player->hasTileLetter(tileLetter) && gameBoard->spaceIsFree()){
+
+//     // }
+// }
+
+string Game::handlePlace(Player *player, string input, string tempWord, vector<Tile *> *placedTiles,
                   vector<string> *positions) {
     bool tilePlaced = false;
 
     vector<string> tilePosVec = splitPlaceCommand(input);
+    tempWord = tempWord + tilePosVec.at(0)[0];
 
     if (!tilePosVec.empty()) {
 
@@ -245,42 +280,75 @@ Game::handlePlace(Player *player, string input, vector<Tile *> *placedTiles,
                 positions->push_back(position);
             }
         }
-
     }
 
     if (!tilePlaced) {
         cout << "Unable to place tile at that position." << endl;
     }
 
+    return tempWord;
 }
 
+bool Game::handleValidWord(string tempWord){
+    bool validWord = false;
+
+    cout << endl;
+    cout << tempWord << endl;
+
+    if(find(validWords.begin(), validWords.end(), tempWord) != validWords.end()){
+        validWord = true;
+    }
+    else{
+        cout << "Input word is not legal!" << endl;
+    }
+
+    return validWord;
+}
 
 //Adding scores
 void Game::addScores(Player player, int scoreToAdd) {
     player.addScore(scoreToAdd);
 }
 
-void Game::startGameFromLoad() {
-    mainGameLoop();
-}
+void Game::saveGame(int playerIndex, string filename) {
+    //removing the blank space from the start
+    filename.erase(0,1);
+    //appending .txt if the file isnt specified
+    filename = filename + ".txt";
 
-void Game::mainGameLoop() {
-    cout << endl;
-    cout << "Let's Play!" << endl;
-    cout << "If you have any trouble, feel free to type 'help'!" << endl;
-
-    bool gameOver = false;
-    while (!gameOver && !std::cin.eof()) {
-        // loop through each player, handle their turns.
-        for (int i = 0; i < int(players.size()) && !gameOver; i++){
-            Player *player = players[i];
-            gameOver = handlePlayerTurn(player);
-
-            //TODO: CHECK SCORES AND PASSES AT THE END OF THE PLAYER FUNCTIONS (Assuming they don't quit)
+    //adding the game data to the file
+    ofstream outfile(filename);
+    if (!outfile) {
+        cout << "Error saving file";
+    } else {
+        outfile << players.size() << endl;
+        for (Player *player: players) {
+            // //Saving each players name, score and hand
+            outfile << *player;
         }
+        //Saving board state
+        outfile << *gameBoard;
+
+        //Saving tile bag state
+        outfile << *bag;
+
+        //Saving current players name
+        outfile << playerIndex << endl;
+        outfile.close();
+        cout << "Game saved to " << filename << endl;
     }
-    cout << "\nThank you for playing, See you next time!\n";
 }
+
+void Game::quitGame() {
+    delete bag;
+
+    for(Player* p: players) {
+        delete p;
+    }
+}
+
+
+
 //
 //int Game::scoreCheck(int direction, string initialCoord) {
 //    int totalTurnScore = 0;

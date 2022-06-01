@@ -20,15 +20,20 @@ class Game {
     Game(ifstream& gameFile);
     ~Game();
 
-   void addPlayers(int numPlayers);
+    //Start game based off numPlayers
+    void startGameLoop(int numPlayers);
 
-   //Start game based off numPlayers
-   void startGameLoop(int numPlayers);
+    //starting the game from a load file
+    void startGameFromLoad();
 
-    //if player hits score ceiling, return true
-    bool runScoreCheck();
+    //looping main functions for game to run
+    void mainGameLoop();
 
-    //Start 4 player game
+    //quitting the game
+    void quitGame();
+
+
+    //adding scores to players
     void addScores(Player player, int scoreToAdd);
 
     int scoreCheck(int direction, string initialCoord);
@@ -44,12 +49,7 @@ class Game {
     int loopVerti(string startCoord, string endCoord);
 
     //Saving game to external file
-    void saveGame(string currPlayerName, string filename);
-    void startGameFromLoad();
-
-    void mainGameLoop();
-
-    void quitGame();
+    void saveGame(int currPlayer, string filename);
 
   private:
     TileBag *bag;
@@ -57,10 +57,15 @@ class Game {
     vector<Player *> players;
     string startCoord;
     string endCoord;
+    vector<string> validWords;
+    bool gameEnd = false;
+
+    //setting a list of valid words into vector to be checked against
+    void setValidWords();
 
     bool makePlayers(int numPlayers);
 
-    bool handlePlayerTurn(Player *player);
+    bool handlePlayerTurn(Player *player, int playerIndex);
 
     /**
      * Handles the "place" action
@@ -69,9 +74,12 @@ class Game {
      * @param input - the VALID place command by the user
      * @return
      */
-    void
-    handlePlace(Player *player, string input, vector<Tile*> *placedTiles,
+    string handlePlace(Player *player, string input, string tempWord, vector<Tile*> *placedTiles,
                 vector<string> *positions);
+
+    void handlePlaceTile(Player *player, string input, vector<Tile*> *placedTiles,
+                vector<string> *positions);
+    bool handleValidWord(string tempWord);
 };
 
 #endif // ASSIGN2_GAME_H
