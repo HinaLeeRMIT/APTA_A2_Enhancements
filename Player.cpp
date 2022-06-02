@@ -85,6 +85,7 @@ void Player::setName(string name) {
     this->name = name;
 }
 
+
 ifstream &operator>>(ifstream& inFile,Player &player) {
     //reading name
     string name = "";

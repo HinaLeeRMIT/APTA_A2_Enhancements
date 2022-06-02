@@ -37,6 +37,10 @@ bool GameBoard::placeTile(Tile *tile, string position) {
     return tilePlaced;
 }
 
+Tile* GameBoard::retrieveTile(int row, int col){
+    return boardVector.at(row).at(col);
+}
+
 bool GameBoard::spaceIsFree(int row, int col) {
     bool isFree = false;
 
@@ -204,6 +208,10 @@ int GameBoard::computeRowScore(int row, int col, vector<Tile*> placedTiles, vect
     }
 
     return rowScore;
+}
+
+int GameBoard::getBoardSize(){
+    return BOARD_SIZE;
 }
 
 std::ifstream &operator>>(std::ifstream& inFile,GameBoard &gameBoard) {

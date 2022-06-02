@@ -50,7 +50,6 @@ class Game {
 
     //Saving game to external file
     void saveGame(int currPlayer, string filename);
-
   private:
     TileBag *bag;
     GameBoard *gameBoard;
@@ -59,9 +58,15 @@ class Game {
     string endCoord;
     vector<string> validWords;
     bool gameEnd = false;
+    string initialPosition = "";
+    string rowColCheck = "";
 
     //setting a list of valid words into vector to be checked against
     void setValidWords();
+
+    //extracting the tile placement specified by the user
+    string extractPlacementLocation(string input);
+
 
     bool makePlayers(int numPlayers);
 
@@ -74,12 +79,15 @@ class Game {
      * @param input - the VALID place command by the user
      * @return
      */
-    string handlePlace(Player *player, string input, string tempWord, vector<Tile*> *placedTiles,
-                vector<string> *positions);
 
-    void handlePlaceTile(Player *player, string input, vector<Tile*> *placedTiles,
-                vector<string> *positions);
     bool handleValidWord(string tempWord);
+
+    void handlePlaceTile(LinkedList *tempHand, Player *player, string placement);
+    bool checkValidOrientation(string position);
+    bool checkValidPlacement(LinkedList *tempHand, Player *player, char tileLetter, string position);
+    void handleFinalPlacement();
+    vector<Tile *> scanHoriWord(int row, int col, int boardSize);
+    vector<Tile *> scanVertiWord(int row, int col, int boardSize);
 };
 
 #endif // ASSIGN2_GAME_H

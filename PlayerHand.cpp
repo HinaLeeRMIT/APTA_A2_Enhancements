@@ -94,10 +94,6 @@ void PlayerHand::setInternalList(LinkedList* list) {
 }
 
 std::ifstream &operator>>(std::ifstream& inFile,PlayerHand &hand) {
-    /*
-    TODO: finish ifstream
-    */
-
     LinkedList* linkedList = new LinkedList();
 
     inFile >> *linkedList;

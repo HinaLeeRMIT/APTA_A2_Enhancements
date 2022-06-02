@@ -1,4 +1,6 @@
 string currWord
+string orientation (rowCol - can be either number or letter)
+
 
 handleFinalWordPlacement()
 Check currWord is legit against validWords
@@ -6,25 +8,34 @@ if 7 letters, BINGO event
 
 handleTileSelected()
 
-if first tile
-check tile valid in handle
-check coord valid on board
-
-if second tile
-check valid NSEW of first tile
+if tile is second tile to be placed, check if etiher row or col is same. If neither, invalid move. If same, set orientation to the letter or number
 
 subsequent tiles 
-Check coordinate integrity maintained
+Check that either row or col matches orientation
 
 currWord.append letter
 
 
-replace()
-check if tile valid in hand
-loop and remove tile from hand from front 
-add to back of tilebag 
-pop tilebag and add to hand
+
+
+REMEMBER TO RESET ROWCOLCHECK
+REMEMBER TO DELETE AND RESET TEMPHAND
+REMEMBER TO REINSTATE TILES INTO PLAYERS HAND OR REIMBURSE
+
+
+//Less important stuff
+ENDGAME
+if placeDone results in an error, or place tile = 7 and error, replace tiles back into player handle
+
+change return into passTrue
+store a passTicker
+
+checker for tilebag is empty
+
+player ends turn and no more tiles in handle
+
+
+
 
 scoring(?)
 
-replace Tiles

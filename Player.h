@@ -57,8 +57,6 @@ public:
     std::string getName();
     void setName(string name);
 
-
-
 private:
     std::string name;
     PlayerHand* hand;

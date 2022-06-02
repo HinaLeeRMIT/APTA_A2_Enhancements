@@ -42,7 +42,6 @@ public:
 
    LinkedList* getInternalHandList();
    void setInternalList(LinkedList* list);
-   
 
 private:
    LinkedList* hand;

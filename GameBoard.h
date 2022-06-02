@@ -53,10 +53,14 @@ class GameBoard {
 
     bool isValidPosition(int row, int col);
 
+    Tile* retrieveTile(int row, int col);
+
     string generateBoardView();
 
     BoardGrid getBoardGrid();
     void setBoardGrid(BoardGrid board);
+
+    int getBoardSize();
 
     /**
      * Computes the score of the tiles placed, including any intersecting tiles.
