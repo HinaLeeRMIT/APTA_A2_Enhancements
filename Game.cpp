@@ -153,7 +153,7 @@ bool Game::handlePlayerTurn(Player *player, int playerIndex) {
     // direction is set once the second tile is placed.
     // horizontal = 0; vertical = 1;
 
-    for (int i = 0; i < 7 && !turnEnd; i++) {
+    while (!turnEnd) {
         cout << endl;
         cout << "What would you like to do?" << endl;
         cout << "> ";
@@ -161,6 +161,7 @@ bool Game::handlePlayerTurn(Player *player, int playerIndex) {
 
         regex placeTileExpr("^[place]+[ ][A-Z][ ][at]+[ ][A-Z]([0-9]+)");
         regex placeDoneExpr("^[place]+[\\s]([D][one]+)");
+        regex replaceTileExpr("replace [A-Z]");
         regex passTurnExpr("pass");
         regex helpExpr("help");
         regex saveGameExpr("save [A-Za-z\\d\\-_.]+");
@@ -187,6 +188,22 @@ bool Game::handlePlayerTurn(Player *player, int playerIndex) {
             player->addScore(gameBoard->computeTurnScore(*placedTiles,
                                                           *placedTilesPositions));
 
+        } else if(regex_match(input, replaceTileExpr)){
+            //getting the char and setting to a char
+            string stringTileLetter = input.substr(8);
+            char tileLetter = stringTileLetter[0];
+
+            Tile *tileToReplace = bag->drawTile();
+            //checking if the tile exists, if so replace it and print out new hand
+            if(player->hasTileLetter(tileLetter)){
+                player->replaceTile(player->getTileFromLetter(tileLetter), tileToReplace);
+                cout << endl;
+                cout<< "The new tile you recieved is " << tileToReplace->letter << "-" << tileToReplace->value << endl;
+                cout << "\nYour new hand is\n" << *player->getHand();
+            }
+            else{
+                cout << "You don't have this tile to replace!" << endl;
+            }
         } else if(regex_match(input, passTurnExpr)){
             cout << "Turn passed!\n";
             validTurn = true;
@@ -206,6 +223,11 @@ bool Game::handlePlayerTurn(Player *player, int playerIndex) {
             cout << "                'place D at D7'" << endl;
             cout << "                'place S at D5'" << endl;
             cout << "                'place Done'" << endl;
+            cout << endl;
+            cout << "'replace [letter]'" << endl;
+            cout << "       Replaces a letter current player chooses if they own that corresponding tile." << endl;
+            cout << "They will be given a new tile." << endl;
+            cout << "       Example: 'replace A'" << endl;
             cout << endl;
             cout << "'pass'" << endl;
             cout << "       Current player passes turn. Turn will be passed to next player." << endl;

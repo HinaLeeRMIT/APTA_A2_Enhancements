@@ -126,7 +126,6 @@ Tile *LinkedList::shift() {
       toReturn = new Tile(*head->tile);
 
       if(nextHead != nullptr) {
-
          // removing the next reference so it doesn't get freed
          head->next = nullptr;
          delete head;
@@ -165,7 +164,7 @@ Tile* LinkedList::pop() {
 }
 
 void LinkedList::remove(int index) {
-   if (index == 0) {
+      if (index == 0) {
       this->removeHead();
    } else if (index == length - 1) {
       this->removeTail();

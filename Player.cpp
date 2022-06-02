@@ -55,17 +55,10 @@ Tile* Player::getTileFromLetter(char letter) {
 };
 
 
-bool Player::replaceTile(Tile* toReplace, Tile* fromBag) {
-    bool replaced = false;
-
-    if(hand->contains(toReplace)) {
-        hand->deleteTile(toReplace);
-        hand->addTile(fromBag);
-        replaced = true;
+void Player::replaceTile(Tile* toReplace, Tile* fromBag) {
+    hand->deleteTile(toReplace);
+    hand->addTile(fromBag);
     }
-
-    return replaced;
-}
 
 //Add Score
 void Player::addScore(int addScore){

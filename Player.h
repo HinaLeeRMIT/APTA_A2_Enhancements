@@ -41,7 +41,7 @@ public:
      */
     Tile* getTileFromLetter(char letter);
 
-    bool replaceTile(Tile* toReplace, Tile* frombag);
+    void replaceTile(Tile* toReplace, Tile* frombag);
 
     //Add Score
     void addScore(int addScore);

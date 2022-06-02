@@ -56,8 +56,6 @@ Tile* PlayerHand::getTileFromLetter(char letter) {
 
     }
 
-    if(toReturn != nullptr) hand->remove(toReturn);
-
     return toReturn;
 }
 
@@ -68,7 +66,7 @@ void PlayerHand::deleteTile(Tile* tileToDelete) {
             hand->remove(i);
             tileDeleted = true;
         }
-    }   
+    }
 }
 
 bool PlayerHand::contains(Tile* tile){
@@ -77,14 +75,11 @@ bool PlayerHand::contains(Tile* tile){
 
 bool PlayerHand::containsLetter(char letter) {
     bool hasLetter = false;
-    Node* current = hand->getHead();
 
-    while(current->next != nullptr && !hasLetter) {
-        if(current->tile->letter == letter) {
+    for(int i = 0; i < hand->getLength() && !hasLetter; i++){
+        if(hand->get(i)->letter == letter) {
             hasLetter = true;
         }
-
-        current = current->next;
     }
 
     return hasLetter;

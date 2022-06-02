@@ -5,9 +5,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
- 
 
-# Make data base, printed on Wed Jun  1 14:54:34 2022
+# Make data base, printed on Thu Jun  2 12:41:00 2022
 
 # Variables
 
@@ -56,7 +55,7 @@ CONDA_PREFIX = /home/yeuni/miniconda3
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-8d8783b6-bd4c-4cb1-9121-aa66b76f7ee3.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-e2c2388c-5698-4b1a-a6d5-6a4171976e8c.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -172,9 +171,9 @@ _CE_CONDA =
 
 # Directories
 
-# . (device 46, inode 64176294690146147): 41 files, no impossibilities.
+# . (device 46, inode 64176294690146147): 42 files, no impossibilities.
 
-# 41 files, no impossibilities in 1 directories.
+# 42 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -277,6 +276,7 @@ Game.o:
 linkedListTest.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
+ 
 #  File has not been updated.
 
 linkedListTest: Tile.o Node.o LinkedList.o linkedListTest.o
@@ -285,7 +285,6 @@ linkedListTest: Tile.o Node.o LinkedList.o linkedListTest.o
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 14):
 	g++ -Wall -Werror -std=c++14 -g -O -o $@ $^
- 
 
 clean:
 #  Implicit rule search has not been done.
@@ -296,7 +295,7 @@ clean:
 
 scrabble: utils.o Tile.o Node.o LinkedList.o TileBag.o PlayerHand.o Player.o GameBoard.o Game.o MainMenu.o scrabble.o
 #  Implicit rule search has not been done.
-#  Last modified 2022-06-01 14:53:08.4317845
+#  Last modified 2022-06-01 20:50:43.4356167
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
@@ -370,12 +369,12 @@ Player.o:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 68 / storage = 753 B / avg = 11 B
-# current buf: size = 8162 B / used = 753 B / count = 68 / avg = 11 B
+# strcache buffers: 1 (0) / strings = 69 / storage = 777 B / avg = 11 B
+# current buf: size = 8162 B / used = 777 B / count = 69 / avg = 11 B
 
-# strcache performance: lookups = 93 / hit rate = 26%
+# strcache performance: lookups = 94 / hit rate = 26%
 # hash-table stats:
-# Load=68/8192=1%, Rehash=0, Collisions=2/93=2%
-# Finished Make data base on Wed Jun  1 14:54:34 2022
+# Load=69/8192=1%, Rehash=0, Collisions=2/94=2%
+# Finished Make data base on Thu Jun  2 12:41:00 2022
 
  
