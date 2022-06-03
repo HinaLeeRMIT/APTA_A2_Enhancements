@@ -1,23 +1,8 @@
-check why symbol being put
-
-
-
-REMEMBER TO REINSTATE TILES INTO PLAYERS HAND OR REIMBURSE
-
-
-//Less important stuff
-ENDGAME
-if placeDone results in an error, or place tile = 7 and error, replace tiles back into player handle
-
-change return into passTrue
-store a passTicker
-
-checker for tilebag is empty
-
-player ends turn and no more tiles in handle
-
-
-
-
 scoring(?)
+Load/save
 
+Make the first tile check for surrounding tiles if board is empty
+
+
+PERSONAL ENHANCEMENT
+format the word back out, based off the strung together initCoord and finalCoord

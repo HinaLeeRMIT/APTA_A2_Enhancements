@@ -60,6 +60,7 @@ class Game {
     bool gameEnd = false;
     vector<string> placementHistory;
     string rowColCheck = "";
+    int loadedCurrPlayer = 0;
 
     //setting a list of valid words into vector to be checked against
     void setValidWords();
@@ -93,7 +94,14 @@ class Game {
     vector<Tile *> scanHoriWord(int row, int col, int boardSize);
     vector<Tile *> scanVertiWord(int row, int col, int boardSize);
 
-    bool okPlacementCheck();
+    bool okPlacementCheck(Player *player);
+    bool checkHoriWord(int currCol, int finalCol, int row);
+    bool checkVertiWord(int currCol, int finalCol, int row);
+    int calcPlacedScore(LinkedList *tempHand);
+    int calcScore();
+    int vertiScore(int row, int col);
+    int horiScore(int row, int col);
+
     bool checkTempPositionNotTaken(string position);
 
     void emptyPlacedTiles();
