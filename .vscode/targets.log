@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun  2 12:41:00 2022
+# Make data base, printed on Fri Jun  3 13:56:25 2022
 
 # Variables
 
@@ -55,7 +55,7 @@ CONDA_PREFIX = /home/yeuni/miniconda3
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-e2c2388c-5698-4b1a-a6d5-6a4171976e8c.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-b78c38b3-3dbf-482f-b692-8657d87a018d.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -276,7 +276,6 @@ Game.o:
 linkedListTest.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
- 
 #  File has not been updated.
 
 linkedListTest: Tile.o Node.o LinkedList.o linkedListTest.o
@@ -286,6 +285,7 @@ linkedListTest: Tile.o Node.o LinkedList.o linkedListTest.o
 #  recipe to execute (from 'Makefile', line 14):
 	g++ -Wall -Werror -std=c++14 -g -O -o $@ $^
 
+ 
 clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -295,7 +295,7 @@ clean:
 
 scrabble: utils.o Tile.o Node.o LinkedList.o TileBag.o PlayerHand.o Player.o GameBoard.o Game.o MainMenu.o scrabble.o
 #  Implicit rule search has not been done.
-#  Last modified 2022-06-01 20:50:43.4356167
+#  Last modified 2022-06-02 21:29:15.4306401
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
@@ -375,6 +375,6 @@ Player.o:
 # strcache performance: lookups = 94 / hit rate = 26%
 # hash-table stats:
 # Load=69/8192=1%, Rehash=0, Collisions=2/94=2%
-# Finished Make data base on Thu Jun  2 12:41:00 2022
+# Finished Make data base on Fri Jun  3 13:56:25 2022
 
  

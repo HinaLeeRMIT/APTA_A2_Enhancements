@@ -21,12 +21,8 @@ Node::Node(Node& other) {
    this->next = other.next;
 }
 
-Node::~Node()
-{
+Node::~Node(){
    delete tile;
-   if (next != nullptr) {
-      delete next;
-   }
 }
 
 bool Node::isEqual(Node* otherNode) {

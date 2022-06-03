@@ -116,11 +116,7 @@ void Game::mainGameLoop() {
         // loop through each player, handle their turns.
         for (int i = 0; i < int(players.size()) && !gameEnd; i++){
             Player *player = players[i];
-            while(!handlePlayerTurn(player, i)){
-                cout << endl;
-                cout << "Invalid turn, please try again!!!" << endl;
-                cout << endl;
-            }
+            handlePlayerTurn(player, i);
 
             //TODO: CHECK SCORES AND PASSES AT THE END OF THE PLAYER FUNCTIONS (Assuming they don't quit)
         }
@@ -128,15 +124,10 @@ void Game::mainGameLoop() {
     cout << "\nThank you for playing, See you next time!\n";
 }
 
-bool Game::handlePlayerTurn(Player *player, int playerIndex) {
+void Game::handlePlayerTurn(Player *player, int playerIndex) {
     //creating tempHand to store tiles used in case invalid turn, where tiles will be placed back into players hand
     LinkedList *tempHand = new LinkedList;
-    //create initial position to scan for words
-    initialPosition = "";
-    //creating a rowColCheck to make sure the direction of the palcement is correct
-    rowColCheck = "";
 
-    bool validTurn = false;
     string tempWord = "";
     string input;
     cout << endl;
@@ -152,13 +143,6 @@ bool Game::handlePlayerTurn(Player *player, int playerIndex) {
     cout << "\nYour hand is\n" << *player->getHand();
 
     bool turnEnd = false;
-
-    // auto pointers to remove need to free memory
-    auto *placedTiles = new vector<Tile *>;
-    auto *placedTilesPositions = new vector<string>;
-
-    // direction is set once the second tile is placed.
-    // horizontal = 0; vertical = 1;
 
     while (!turnEnd) {
         cout << endl;
@@ -184,13 +168,23 @@ bool Game::handlePlayerTurn(Player *player, int playerIndex) {
             handlePlaceTile(tempHand, player, placement);
 
         } else if (regex_match(input, placeDoneExpr)) {
-            validTurn = true; 
-            turnEnd = true;
-            player->addScore(gameBoard->computeTurnScore(*placedTiles, 
-            void Game::handleFinalPlacement(){
-
+            bool validPlacement = okPlacementCheck(); 
+            if (validPlacement){
+                turnEnd = true;
+                drawNewTiles(player);
+                placeTiles(tempHand);
+                //calculate score here
+            }else{
+                reimburseTiles(player, tempHand);
+                emptyPlacedTiles();
+                cout << endl;
+                cout << "Your current hand is: " << *player->getHand() << endl;
             }
-            *placedTilesPositions));
+
+            delete tempHand;
+            tempHand = new LinkedList;
+            placementHistory.clear();
+            rowColCheck = "";
 
         } else if(regex_match(input, replaceTileExpr)){
             //getting the char and setting to a char
@@ -210,7 +204,6 @@ bool Game::handlePlayerTurn(Player *player, int playerIndex) {
             }
         } else if(regex_match(input, passTurnExpr)){
             cout << "Turn passed!\n";
-            validTurn = true;
             turnEnd = true;
         } else if(regex_match(input, helpExpr)){
             cout << "List of commands!\n";
@@ -255,7 +248,6 @@ bool Game::handlePlayerTurn(Player *player, int playerIndex) {
             string filename = input.substr(4);
             saveGame(playerIndex, filename);
         } else if(regex_match(input, quitGameExpr)) {
-            validTurn = true;
             turnEnd = true;
             gameEnd = true;
         } else if (cin.eof()) {
@@ -264,8 +256,104 @@ bool Game::handlePlayerTurn(Player *player, int playerIndex) {
             cout << "Invalid action provided. Please try again" << endl;
         }
     }
+}
+
+void Game::drawNewTiles(Player *player){
+    while(player->getHandSize() < 7 || bag->getSize() == 0){
+        Tile *newTile = bag->drawTile();
+        player->addTile(newTile);
+    }
+}
+
+void Game::reimburseTiles(Player *player, LinkedList *tempHand){
+    for(int i = 0; i < tempHand->getLength(); i++){
+        player->addTile(tempHand->get(i));
+    }
+}
+
+bool Game::okPlacementCheck(){
+    bool validTurn = false;
+    vector<int> tempCoordValidation;
+
+    std::array<int, 2> initialPos = convertPosTokenToInt(placementHistory.front());
+    std::array<int, 2> finalPos = convertPosTokenToInt(placementHistory.back());
+
+    int initRow = initialPos.at(0);
+    int initCol = initialPos.at(1);
+    int finalRow = finalPos.at(0);
+    int finalCol = finalPos.at(1);
+
+    bool foundNull = false;
+
+    //hori case
+    if (initRow == finalRow){
+        while (initCol != finalCol){
+            string tempCoordiante = std::to_string(finalRow) + std::to_string(initCol);
+
+            //not adding to temp validation if exists in placement history
+            if(std::find(placementHistory.begin(), placementHistory.end(), tempCoordiante) != placementHistory.end()){}
+            else{tempCoordValidation.push_back(initCol);}
+
+            initCol++;
+        }
+
+        for(int col : tempCoordValidation){
+            if (!gameBoard->spaceIsFree(finalRow, col)){
+            }else{
+                foundNull = true;
+            }
+        }
+    }
+    //verti condition
+    else{
+        while (initRow != finalRow){
+            string tempCoordiante = std::to_string(initRow) + std::to_string(finalCol);
+
+            //not adding to temp validation if exists in placement history
+            if(std::find(placementHistory.begin(), placementHistory.end(), tempCoordiante) != placementHistory.end()){}
+            else{tempCoordValidation.push_back(initRow);}
+
+            initRow++;
+        }
+        
+        for(int row : tempCoordValidation){
+            if (!gameBoard->spaceIsFree(row, finalCol)){
+            }else{
+                foundNull = true;
+            }
+        }
+    }
+    
+    if(!foundNull){
+        cout << "Valid word!" << endl;
+        if(placementHistory.size() == 7){
+            cout <<"BINGO!!!" << endl;
+        }
+        validTurn = true;
+
+    }else{
+        cout << "Invalid word, please try again!" << endl;
+    }
 
     return validTurn;
+}
+
+void Game::emptyPlacedTiles(){
+    for (int i = 0; i < int(placementHistory.size()); i++){
+        std::array<int, 2> rowCol = convertPosTokenToInt(placementHistory[i]);
+        int row = rowCol.at(0);
+        int col = rowCol.at(1);
+        gameBoard->placeTile(nullptr, row, col);
+    }
+}
+
+void Game::placeTiles(LinkedList *tempHand){
+    for(int i = 0; i < int(placementHistory.size()); i++){
+        std::array<int, 2> rowCol = convertPosTokenToInt(placementHistory.at(i));
+        int row = rowCol.at(0);
+        int col = rowCol.at(1);
+        gameBoard->placeTile(tempHand->get(i), row, col);
+    }
 }
 
 string Game::extractPlacementLocation(string input){
@@ -299,32 +387,53 @@ void Game::handlePlaceTile(LinkedList *tempHand, Player *player, string placemen
     //check for row or col integrity.
     if (tempHand->getLength() == 0) {
         if(!checkValidPlacement(tempHand, player, tileLetter, position)){
-            cout << "Invalid placement 1, please try again!" << endl;
-        }else{rowColCheck = position; initialPosition = position;}
+            cout << "Invalid placement, please try again!" << endl;
+            cout << endl;
+            cout << "Your current hand is: " << *player->getHand() << endl;
+        }else{placementHistory.push_back(position); rowColCheck = position;}
     }
     else{
         if(!checkValidOrientation(position) || !checkValidPlacement(tempHand, player, tileLetter, position)){
-            cout << "Invalid placement 2, please try again!" << endl;
-        }
+            cout << "Invalid placement, please try again!" << endl;
+            cout << "Your current hand is: " << *player->getHand() << endl;
+        }else{placementHistory.push_back(position);}
     }
 }
 
 bool Game::checkValidPlacement(LinkedList *tempHand, Player *player, char tileLetter, string position){
     bool validPlacement = false;
+
+    std::array<int, 2> rowCol = convertPosTokenToInt(position);
+    int row = rowCol.at(0);
+    int col = rowCol.at(1);
+
     //first check player has tile
     if (!player->hasTileLetter(tileLetter)) {
         cout << "You do not have this tile to place!" << endl;
     }else{
-        auto toPlace = player->getTileFromLetter(tileLetter);
+        bool tilePositionNotTaken = false;
+        tilePositionNotTaken = checkTempPositionNotTaken(position);
         //second check if gameboard placement is valid
-        if (!gameBoard->placeTile(toPlace, position)) {
-            cout << "This tile placement position is invalid!" << endl;
-        }else{
-            tempHand->addBack(toPlace);
+        if ((gameBoard->spaceIsFree(row, col)) && (tilePositionNotTaken)) {
             validPlacement = true;
+            tempHand->addBack(player->getTileFromLetter(tileLetter));    
+            player->removeTile(tileLetter);                  
+        }else{
+            cout << "This tile placement position is invalid!" << endl;
         }
     }
     return validPlacement;
+}
+
+bool Game::checkTempPositionNotTaken(string position){
+    bool positionNotTaken = true;
+    for(int i = 0; i < int(placementHistory.size()); i++){
+        if(position == placementHistory[i]){
+            positionNotTaken = false;
+        }
+    }
+    
+    return positionNotTaken;
 }
 
 bool Game::checkValidOrientation(string position){
@@ -344,7 +453,6 @@ bool Game::checkValidOrientation(string position){
         }
 
     }else{
-        cout << "going in for size 1" << endl;
         //checking for size 1
         char checker = rowColCheck.at(0);
         if ((checker == placementRow) || (checker == placementCol)){
@@ -367,7 +475,7 @@ bool Game::checkValidOrientation(string position){
 //     int finalVertiPoints = 0;
 
 //     int boardSize = gameBoard->getBoardSize();
-//     std::array<int, 2> rowCol = convertPosTokenToInt(initialPosition);
+//     std::array<int, 2> rowCol = convertPosTokenToInt(placementHistory.at(0));
 //     int initRow = rowCol.at(0);
 //     int initCol = rowCol.at(1);
 
@@ -392,32 +500,32 @@ bool Game::checkValidOrientation(string position){
 //     }
 // }
 
-vector<Tile *> Game::scanHoriWord(int row, int col, int boardSize){
-    vector<Tile *> word;
-    bool foundNull = false;
+// vector<Tile *> Game::scanHoriWord(int row, int col, int boardSize){
+//     vector<Tile *> word;
+//     bool foundNull = false;
 
-    //checking left side
-    while(row != 0 || !foundNull){
-        if (!gameBoard->spaceIsFree(row, col)){
-            row--;
-        }else{
-            foundNull = true;
-        }
-    }
+//     //checking left side
+//     while(row != 0 || !foundNull){
+//         if (!gameBoard->spaceIsFree(row, col)){
+//             row--;
+//         }else{
+//             foundNull = true;
+//         }
+//     }
 
-    //scanning all the way to the right
-    //resetting foundNull
-    foundNull = false;
-    while(row != boardSize || !foundNull){
-        if (!gameBoard->spaceIsFree(row, col)){
-            word.push_back(gameBoard->retrieveTile(row, col));
-            row++;
-        }else{
-            foundNull = true;
-        }
-    }
-    return word;
-}
+//     //scanning all the way to the right
+//     //resetting foundNull
+//     foundNull = false;
+//     while(row != boardSize || !foundNull){
+//         if (!gameBoard->spaceIsFree(row, col)){
+//             word.push_back(gameBoard->retrieveTile(row, col));
+//             row++;
+//         }else{
+//             foundNull = true;
+//         }
+//     }
+//     return word;
+// }
 
 vector<Tile *> Game::scanHoriWord(int row, int col, int boardSize){
     vector<Tile *> word;

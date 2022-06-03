@@ -85,6 +85,10 @@ bool PlayerHand::containsLetter(char letter) {
     return hasLetter;
 }
 
+int PlayerHand::getLength(){
+    return hand->getLength();
+}
+
 LinkedList* PlayerHand::getInternalHandList() {
     return hand;
 }

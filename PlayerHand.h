@@ -40,6 +40,8 @@ public:
 
    bool containsLetter(char letter);
 
+   int getLength();
+
    LinkedList* getInternalHandList();
    void setInternalList(LinkedList* list);
 

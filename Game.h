@@ -58,7 +58,7 @@ class Game {
     string endCoord;
     vector<string> validWords;
     bool gameEnd = false;
-    string initialPosition = "";
+    vector<string> placementHistory;
     string rowColCheck = "";
 
     //setting a list of valid words into vector to be checked against
@@ -70,7 +70,7 @@ class Game {
 
     bool makePlayers(int numPlayers);
 
-    bool handlePlayerTurn(Player *player, int playerIndex);
+    void handlePlayerTurn(Player *player, int playerIndex);
 
     /**
      * Handles the "place" action
@@ -83,11 +83,20 @@ class Game {
     bool handleValidWord(string tempWord);
 
     void handlePlaceTile(LinkedList *tempHand, Player *player, string placement);
+    void drawNewTiles(Player *player);
+    void reimburseTiles(Player *player, LinkedList *tempHand);
+    void placeTiles(LinkedList *tempHand);
+
     bool checkValidOrientation(string position);
     bool checkValidPlacement(LinkedList *tempHand, Player *player, char tileLetter, string position);
     void handleFinalPlacement();
     vector<Tile *> scanHoriWord(int row, int col, int boardSize);
     vector<Tile *> scanVertiWord(int row, int col, int boardSize);
+
+    bool okPlacementCheck();
+    bool checkTempPositionNotTaken(string position);
+
+    void emptyPlacedTiles();
 };
 
 #endif // ASSIGN2_GAME_H

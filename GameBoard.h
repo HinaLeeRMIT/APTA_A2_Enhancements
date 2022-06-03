@@ -47,7 +47,7 @@ class GameBoard {
      * @param position
      * @return
      */
-    bool placeTile(Tile *tile, string position);
+    void placeTile(Tile *tile, int row, int col);
 
     bool spaceIsFree(int row, int col);
 

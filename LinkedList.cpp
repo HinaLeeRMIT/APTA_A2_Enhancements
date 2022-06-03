@@ -7,7 +7,15 @@ LinkedList::LinkedList() {
 }
 
 LinkedList::~LinkedList() {
-   delete head;
+   Node* curr = head;
+   Node* next = nullptr;
+
+   while (curr != nullptr){
+      next = curr->next;
+      delete curr;
+      length --;
+      curr = next;
+   }
 }
 
 /**

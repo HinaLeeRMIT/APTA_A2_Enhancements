@@ -22,8 +22,16 @@ void Player::setPlayerHand(TileBag* bag){
     }
 }
 
+void Player::addTile(Tile* newTile){
+    hand->addTile(newTile);
+}
+
 PlayerHand* Player::getHand() {
     return hand;
+}
+
+int Player::getHandSize(){
+    return hand->getLength();
 }
 
 void Player::setHand(PlayerHand* hand) {
@@ -58,7 +66,12 @@ Tile* Player::getTileFromLetter(char letter) {
 void Player::replaceTile(Tile* toReplace, Tile* fromBag) {
     hand->deleteTile(toReplace);
     hand->addTile(fromBag);
-    }
+}
+
+void Player::removeTile(char tileLetter){
+    Tile* tileToRemove = getTileFromLetter(tileLetter);
+    hand->deleteTile(tileToRemove);
+}
 
 //Add Score
 void Player::addScore(int addScore){

@@ -22,6 +22,10 @@ public:
 
     PlayerHand* getHand();
 
+    int getHandSize();
+
+    void addTile(Tile* newTile);
+
     void setHand(PlayerHand* hand);
 
     //Play x tiles
@@ -42,6 +46,8 @@ public:
     Tile* getTileFromLetter(char letter);
 
     void replaceTile(Tile* toReplace, Tile* frombag);
+
+    void removeTile(char tileLetter);
 
     //Add Score
     void addScore(int addScore);

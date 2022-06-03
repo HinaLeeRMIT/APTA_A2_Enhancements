@@ -2,10 +2,12 @@ make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/mnt/c/Users/Hina/Desktop/Uni stuff/Advanced programming tecnhiques/APTA_A2_Enhancements'
 g++ -Wall -Werror -std=c++14 -g -O -c utils.cpp
 g++ -Wall -Werror -std=c++14 -g -O -c Tile.cpp
+ 
 g++ -Wall -Werror -std=c++14 -g -O -c Node.cpp
 g++ -Wall -Werror -std=c++14 -g -O -c LinkedList.cpp
 g++ -Wall -Werror -std=c++14 -g -O -c TileBag.cpp
 g++ -Wall -Werror -std=c++14 -g -O -c PlayerHand.cpp
+ 
 g++ -Wall -Werror -std=c++14 -g -O -c Player.cpp
 g++ -Wall -Werror -std=c++14 -g -O -c GameBoard.cpp
 g++ -Wall -Werror -std=c++14 -g -O -c Game.cpp

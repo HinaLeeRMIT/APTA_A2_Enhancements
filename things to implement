@@ -1,25 +1,7 @@
-string currWord
-string orientation (rowCol - can be either number or letter)
-
-
-handleFinalWordPlacement()
-Check currWord is legit against validWords
-if 7 letters, BINGO event
-
-handleTileSelected()
-
-if tile is second tile to be placed, check if etiher row or col is same. If neither, invalid move. If same, set orientation to the letter or number
-
-subsequent tiles 
-Check that either row or col matches orientation
-
-currWord.append letter
+check why symbol being put
 
 
 
-
-REMEMBER TO RESET ROWCOLCHECK
-REMEMBER TO DELETE AND RESET TEMPHAND
 REMEMBER TO REINSTATE TILES INTO PLAYERS HAND OR REIMBURSE
 
 

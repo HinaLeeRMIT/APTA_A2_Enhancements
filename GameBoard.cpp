@@ -18,23 +18,8 @@ GameBoard::~GameBoard() {
 
 }
 
-bool GameBoard::placeTile(Tile *tile, string position) {
-    bool tilePlaced = false;
-
-    std::array<int, 2> rowCol = convertPosTokenToInt(position);
-    int row = rowCol.at(0);
-    int col = rowCol.at(1);
-
-
-    if (spaceIsFree(row, col)) {
-        if (tile != nullptr) {
-            boardVector.at(row).at(col) = tile;
-            tilePlaced = true;
-        }
-
-    }
-
-    return tilePlaced;
+void GameBoard::placeTile(Tile *tile, int row, int col) {
+    boardVector.at(row).at(col) = tile;
 }
 
 Tile* GameBoard::retrieveTile(int row, int col){
@@ -44,16 +29,11 @@ Tile* GameBoard::retrieveTile(int row, int col){
 bool GameBoard::spaceIsFree(int row, int col) {
     bool isFree = false;
 
-
     if (isValidPosition(row, col)) {
-
-
-
         Tile *tileAtPos = boardVector.at(row).at(col);
 
         isFree = tileAtPos == nullptr;
     }
-
 
     return isFree;
 }
@@ -62,7 +42,6 @@ bool GameBoard::isValidPosition(int row, int col) {
     bool isValid = false;
     // row and col must fit the bounds
     isValid = (row >= 0 && row <= 14) && (col >= 0 && col <= 14);
-
 
     return isValid;
 }
