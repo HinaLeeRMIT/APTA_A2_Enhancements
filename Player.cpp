@@ -9,6 +9,7 @@ Player::Player(std::string name){
     hand = new PlayerHand();
     score = 0;
     turnsPassed = 0;
+    passCount = 0;
 }
 
 Player::~Player(){
@@ -96,6 +97,22 @@ string Player::getName() {
 
 void Player::setName(string name) {
     this->name = name;
+}
+
+//Pass count functions
+//Add 1 to pass count
+void Player::addPassCount(){
+    passCount++;
+}
+
+//reset pass count back to 0
+void Player::resetPassCount(){
+    passCount = 0;
+}
+
+//return the value of pass count
+int Player::getPassCount(){
+    return passCount;
 }
 
 

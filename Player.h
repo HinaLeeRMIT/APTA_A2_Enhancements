@@ -60,6 +60,12 @@ public:
 
     bool hasTileLetter(char letter);
 
+    void addPassCount();
+
+    void resetPassCount();
+
+    int getPassCount();
+
     std::string getName();
     void setName(string name);
 
@@ -67,6 +73,7 @@ private:
     std::string name;
     PlayerHand* hand;
     int score;
+    int passCount;
 
     int turnsPassed;
 };

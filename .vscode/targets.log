@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun  3 13:56:25 2022
+# Make data base, printed on Sun Jun  5 14:53:01 2022
 
 # Variables
 
@@ -55,7 +55,7 @@ CONDA_PREFIX = /home/yeuni/miniconda3
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-b78c38b3-3dbf-482f-b692-8657d87a018d.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-6b63efaf-59da-4f9c-9552-3ae8f3d3d06b.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -171,9 +171,9 @@ _CE_CONDA =
 
 # Directories
 
-# . (device 46, inode 64176294690146147): 42 files, no impossibilities.
+# . (device 46, inode 64176294690146147): 46 files, no impossibilities.
 
-# 42 files, no impossibilities in 1 directories.
+# 46 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -283,9 +283,9 @@ linkedListTest: Tile.o Node.o LinkedList.o linkedListTest.o
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 14):
+ 
 	g++ -Wall -Werror -std=c++14 -g -O -o $@ $^
 
- 
 clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -295,7 +295,7 @@ clean:
 
 scrabble: utils.o Tile.o Node.o LinkedList.o TileBag.o PlayerHand.o Player.o GameBoard.o Game.o MainMenu.o scrabble.o
 #  Implicit rule search has not been done.
-#  Last modified 2022-06-02 21:29:15.4306401
+#  Last modified 2022-06-03 23:37:08.0855348
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
@@ -369,12 +369,12 @@ Player.o:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 69 / storage = 777 B / avg = 11 B
-# current buf: size = 8162 B / used = 777 B / count = 69 / avg = 11 B
+# strcache buffers: 1 (0) / strings = 73 / storage = 838 B / avg = 11 B
+# current buf: size = 8162 B / used = 838 B / count = 73 / avg = 11 B
 
-# strcache performance: lookups = 94 / hit rate = 26%
+# strcache performance: lookups = 98 / hit rate = 25%
 # hash-table stats:
-# Load=69/8192=1%, Rehash=0, Collisions=2/94=2%
-# Finished Make data base on Fri Jun  3 13:56:25 2022
+# Load=73/8192=1%, Rehash=0, Collisions=2/98=2%
+# Finished Make data base on Sun Jun  5 14:53:01 2022
 
  

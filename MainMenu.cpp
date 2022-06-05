@@ -93,7 +93,7 @@ void MainMenu::startGame(int numPlayers)
     // TODO: Create new Game instance. Do not load anything into it.
     // NOTE: Can overload stream operator on Game instance to get access to all the information.
     game = new Game();
-    game->startGameLoop(numPlayers);
+    game->startGame(numPlayers);
 }
 
 bool MainMenu::loadGame()
@@ -113,6 +113,9 @@ bool MainMenu::loadGame()
     ifstream inFile(input);
 
     if(inFile.is_open()){
+        cout << "Loading game!" << endl;
+        cout << endl;
+        
         game = new Game(inFile);
         inFile.close();
         game->startGameFromLoad();
